@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Reservation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <a href="/reservations" class="btn btn-secondary mb-3">Back to Reservations</a>
+        <h2>Edit Reservation</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Reservation ID</label>
+                <input type="number" class="form-control" name="reservationid" value="{{ reservation[0] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Customer ID</label>
+                <input type="number" class="form-control" name="customerid" value="{{ reservation[1] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Room ID</label>
+                <input type="number" class="form-control" name="roomid" value="{{ reservation[2] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Reservation Date</label>
+                <input type="date" class="form-control" name="reservationdate" value="{{ reservation[3].strftime('%Y-%m-%d') }}" required>
+            </div>
+            <div class="form-group">
+                <label>Check-In Date</label>
+                <input type="date" class="form-control" name="checkindate" value="{{ reservation[4].strftime('%Y-%m-%d') }}" required>
+            </div>
+            <div class="form-group">
+                <label>Check-Out Date</label>
+                <input type="date" class="form-control" name="checkoutdate" value="{{ reservation[5].strftime('%Y-%m-%d') }}" required>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select class="form-control" name="status" required>
+                    <option value="Booked" {% if reservation[6] == 'Booked' %}selected{% endif %}>Booked</option>
+                    <option value="Occupied" {% if reservation[6] == 'Occupied' %}selected{% endif %}>Occupied</option>
+                    <option value="Checked-Out" {% if reservation[6] == 'Checked-Out' %}selected{% endif %}>Checked-Out</option>
+                    <option value="Cancelled" {% if reservation[6] == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Reservation</button>
+        </form>
+    </div>
+</body>
+</html>

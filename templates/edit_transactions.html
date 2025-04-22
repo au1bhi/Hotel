@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Transaction</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <a href="/transactions" class="btn btn-secondary mb-3">Back to Transactions</a>
+        <h2>Edit Transaction</h2>
+        <form method="POST">
+             <div class="form-group">
+                <label>Transaction ID</label>
+                <input type="number" class="form-control" name="transactionid" value="{{ transaction[0] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Customer ID</label>
+                <input type="number" class="form-control" name="customerid" value="{{ transaction[1] }}" required>
+            </div>
+             <div class="form-group">
+                <label>Room ID</label>
+                <input type="number" class="form-control" name="roomid" value="{{ transaction[2] }}">
+            </div>
+             <div class="form-group">
+                <label>Service ID</label>
+                <input type="number" class="form-control" name="serviceid" value="{{ transaction[3] }}">
+            </div>
+            <div class="form-group">
+                <label>Amount</label>
+                <input type="number" step="0.01" class="form-control" name="amount" value="{{ transaction[4] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <input type="text" class="form-control" name="paymentmethod" value="{{ transaction[5] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Transaction Date</label>
+                <input type="date" class="form-control" name="transactiondate" value="{{ transaction[6].strftime('%Y-%m-%d') }}" required>
+            </div>
+             <div class="form-group">
+                <label>Deposit</label>
+                <input type="number" step="0.01" class="form-control" name="deposit" value="{{ transaction[7] }}">
+            </div>
+             <div class="form-group">
+                <label>Refund</label>
+                <input type="number" step="0.01" class="form-control" name="refund" value="{{ transaction[8] }}">
+            </div>
+             <div class="form-group">
+                <label>Tax</label>
+                <input type="number" step="0.01" class="form-control" name="tax" value="{{ transaction[9] }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Update Transaction</button>
+        </form>
+    </div>
+</body>
+</html>

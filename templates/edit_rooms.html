@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Room</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <a href="/rooms" class="btn btn-secondary mb-3">Back to Rooms</a>
+        <h2>Edit Room</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Room ID</label>
+                <input type="number" class="form-control" name="roomid" value="{{ room[0] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Room Type</label>
+                <input type="text" class="form-control" name="roomtype" value="{{ room[1] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" step="0.01" class="form-control" name="price" value="{{ room[2] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select class="form-control" name="status" required>
+                    <option value="Available" {% if room[3] == 'Available' %}selected{% endif %}>Available</option>
+                    <option value="Booked" {% if room[3] == 'Booked' %}selected{% endif %}>Booked</option>
+                    <option value="Occupied" {% if room[3] == 'Occupied' %}selected{% endif %}>Occupied</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Floor</label>
+                <input type="number" class="form-control" name="floor" value="{{ room[4] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Orientation</label>
+                <input type="text" class="form-control" name="orientation" value="{{ room[5] }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Update Room</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -51,38 +51,41 @@
         <!-- 客户列表 -->
         <div class="mt-4">
             <h3>Customer List</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Customer ID</th>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Address</th>
-                        <th>ID Number</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for customer in customers %}
-                    <tr>
-                        <td>{{ customer[0] }}</td>
-                        <td>{{ customer[1] }}</td>
-                        <td>{{ customer[2] }}</td>
-                        <td>{{ customer[3] }}</td>
-                        <td>{{ customer[4] }}</td>
-                        <td>{{ customer[5] }}</td>
-                        <td>
-                            <form method="POST" style="display: inline;">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="customerid" value="{{ customer[0] }}">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Customer ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>ID Number</th>
+                            <th style="width: 150px; white-space: nowrap;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for customer in customers %}
+                        <tr>
+                            <td>{{ customer[0] }}</td>
+                            <td>{{ customer[1] }}</td>
+                            <td>{{ customer[2] }}</td>
+                            <td>{{ customer[3] }}</td>
+                            <td>{{ customer[4] }}</td>
+                            <td>{{ customer[5] }}</td>
+                            <td style="white-space: nowrap;">
+                                <a href="/customers/edit/{{ customer[0] }}" class="btn btn-primary btn-sm">Edit</a>
+                                <form method="POST" style="display: inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="customerid" value="{{ customer[0] }}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </body>

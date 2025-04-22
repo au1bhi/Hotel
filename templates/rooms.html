@@ -77,6 +77,7 @@
                         <td>{{ room[4] }}</td>
                         <td>{{ room[5] }}</td>
                         <td>
+                            <a href="/rooms/edit/{{ room[0] }}" class="btn btn-primary btn-sm">Edit</a>
                             <form method="POST" style="display: inline;">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="roomid" value="{{ room[0] }}">

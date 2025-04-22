@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Member</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <a href="/members" class="btn btn-secondary mb-3">Back to Members</a>
+        <h2>Edit Member</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label>Member ID</label>
+                <input type="number" class="form-control" name="memberid" value="{{ member[0] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Customer ID</label>
+                <input type="number" class="form-control" name="customerid" value="{{ member[1] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Membership Level</label>
+                <input type="text" class="form-control" name="membershipslevel" value="{{ member[2] }}" required>
+            </div>
+            <div class="form-group">
+                <label>Points</label>
+                <input type="number" class="form-control" name="points" value="{{ member[3] }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Update Member</button>
+        </form>
+    </div>
+</body>
+</html>

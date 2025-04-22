@@ -84,6 +84,7 @@
                         <td>{{ reservation[5] }}</td>
                         <td>{{ reservation[6] }}</td>
                         <td>
+                            <a href="/reservations/edit/{{ reservation[0] }}" class="btn btn-primary btn-sm">Edit</a>
                             <form method="POST" style="display: inline;">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="reservationid" value="{{ reservation[0] }}">

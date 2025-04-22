@@ -40,8 +40,29 @@ def index():
         services = cur.fetchall()
         
         cur.close()
-        return render_template('index.html', rooms=rooms, customers=customers, reservations=reservations, services=services, search_term=search_term)
+        return render_template('index.html', rooms=rooms, customers=customers, reservations=reservations, services=services, search_term=search_term, sql_result=None)
     return render_template('index.html')
+
+@app.route('/terminal')
+def terminal():
+    return render_template('terminal.html', sql_result=None)
+
+@app.route('/execute_sql', methods=['POST'])
+def execute_sql():
+    sql_code = request.form['sql_code']
+    cur = mysql.connection.cursor()
+    try:
+        cur.execute(sql_code)
+        mysql.connection.commit()
+        flash("SQL 执行成功！")
+        sql_result = cur.fetchall()
+    except Exception as e:
+        mysql.connection.rollback()
+        flash(f"SQL 执行失败：{e}")
+        sql_result = None
+    
+    cur.close()
+    return render_template('terminal.html', sql_result=sql_result)
 
 # 房间管理路由
 @app.route('/rooms', methods=['GET', 'POST'])
@@ -77,6 +98,29 @@ def rooms():
     rooms = cur.fetchall()
     cur.close()
     return render_template('rooms.html', rooms=rooms)
+
+@app.route('/rooms/edit/<int:id>', methods=['GET', 'POST'])
+def edit_rooms(id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM Rooms WHERE RoomID = %s", (id,))
+    room = cur.fetchone()
+    cur.close()
+
+    if request.method == 'POST':
+        roomid = request.form['roomid']
+        roomtype = request.form['roomtype']
+        price = request.form['price']
+        status = request.form['status']
+        floor = request.form['floor']
+        orientation = request.form['orientation']
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE Rooms SET RoomID = %s, RoomType = %s, Price = %s, Status = %s, Floor = %s, Orientation = %s WHERE RoomID = %s",
+                    (roomid, roomtype, price, status, floor, orientation, id))
+        mysql.connection.commit()
+        flash("房间信息更新成功！")
+        return redirect(url_for('rooms'))
+
+    return render_template('edit_rooms.html', room=room)
 
 # 客户管理路由
 @app.route('/customers', methods=['GET', 'POST'])
@@ -126,6 +170,29 @@ def customers():
     customers = cur.fetchall()
     cur.close()
     return render_template('customers.html', customers=customers)
+
+@app.route('/customers/edit/<int:id>', methods=['GET', 'POST'])
+def edit_customers(id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM Customers WHERE CustomerID = %s", (id,))
+    customer = cur.fetchone()
+    cur.close()
+
+    if request.method == 'POST':
+        customerid = request.form['customerid']
+        name = request.form['name']
+        phone = request.form['phone']
+        email = request.form['email']
+        address = request.form['address']
+        idnumber = request.form['idnumber']
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE Customers SET CustomerID = %s, Name = %s, Phone = %s, Email = %s, Address = %s, IDNumber = %s WHERE CustomerID = %s",
+                    (customerid, name, phone, email, address, idnumber, id))
+        mysql.connection.commit()
+        flash("客户信息更新成功！")
+        return redirect(url_for('customers'))
+
+    return render_template('edit_customers.html', customer=customer)
 
 # 预订管理路由
 @app.route('/reservations', methods=['GET', 'POST'])
@@ -179,6 +246,42 @@ def reservations():
     cur.close()
     return render_template('reservations.html', reservations=reservations)
 
+@app.route('/reservations/edit/<int:id>', methods=['GET', 'POST'])
+def edit_reservations(id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM Reservations WHERE ReservationID = %s", (id,))
+    reservation = cur.fetchone()
+    cur.close()
+
+    if request.method == 'POST':
+        reservationid = request.form['reservationid']
+        customerid = request.form['customerid']
+        roomid = request.form['roomid']
+        reservationdate_str = request.form['reservationdate']
+        checkindate_str = request.form['checkindate']
+        checkoutdate_str = request.form['checkoutdate']
+        status = request.form['status']
+        
+        # 转换日期格式
+        try:
+            reservationdate = datetime.datetime.strptime(reservationdate_str, '%Y-%m-%d').date()
+            checkindate = datetime.datetime.strptime(checkindate_str, '%Y-%m-%d').date()
+            checkoutdate = datetime.datetime.strptime(checkoutdate_str, '%Y-%m-%d').date()
+        except ValueError as e:
+            flash(f"Invalid date format: {e}")
+            mysql.connection.rollback()
+            cur.close()
+            return render_template('edit_reservations.html', reservation=reservation)
+        
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE Reservations SET ReservationID = %s, CustomerID = %s, RoomID = %s, ReservationDate = %s, CheckInDate = %s, CheckOutDate = %s, Status = %s WHERE ReservationID = %s",
+                    (reservationid, customerid, roomid, reservationdate, checkindate, checkoutdate, status, id))
+        mysql.connection.commit()
+        flash("预订信息更新成功！")
+        return redirect(url_for('reservations'))
+
+    return render_template('edit_reservations.html', reservation=reservation)
+
 # 服务管理路由
 @app.route('/services', methods=['GET', 'POST'])
 def services():
@@ -211,6 +314,27 @@ def services():
     cur.close()
     return render_template('services.html', services=services)
 
+@app.route('/services/edit/<int:id>', methods=['GET', 'POST'])
+def edit_services(id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM Services WHERE ServiceID = %s", (id,))
+    service = cur.fetchone()
+    cur.close()
+
+    if request.method == 'POST':
+        serviceid = request.form['serviceid']
+        servicetype = request.form['servicetype']
+        price = request.form['price']
+        servicetime = request.form['servicetime']
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE Services SET ServiceID = %s, ServiceType = %s, Price = %s, ServiceTime = %s WHERE ServiceID = %s",
+                    (serviceid, servicetype, price, servicetime, id))
+        mysql.connection.commit()
+        flash("服务信息更新成功！")
+        return redirect(url_for('services'))
+
+    return render_template('edit_services.html', service=service)
+
 # 会员管理路由
 @app.route('/members', methods=['GET', 'POST'])
 def members():
@@ -239,6 +363,27 @@ def members():
     members = cur.fetchall()
     cur.close()
     return render_template('members.html', members=members)
+
+@app.route('/members/edit/<int:id>', methods=['GET', 'POST'])
+def edit_members(id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM Members WHERE MemberID = %s", (id,))
+    member = cur.fetchone()
+    cur.close()
+
+    if request.method == 'POST':
+        memberid = request.form['memberid']
+        customerid = request.form['customerid']
+        membershipslevel = request.form['membershipslevel']
+        points = request.form['points']
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE Members SET MemberID = %s, CustomerID = %s, MembershipLevel = %s, Points = %s WHERE MemberID = %s",
+                    (memberid, customerid, membershipslevel, points, id))
+        mysql.connection.commit()
+        flash("会员信息更新成功！")
+        return redirect(url_for('members'))
+
+    return render_template('edit_members.html', member=member)
 
 # 交易管理路由
 @app.route('/transactions', methods=['GET', 'POST'])
@@ -274,6 +419,33 @@ def transactions():
     transactions = cur.fetchall()
     cur.close()
     return render_template('transactions.html', transactions=transactions)
+
+@app.route('/transactions/edit/<int:id>', methods=['GET', 'POST'])
+def edit_transactions(id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM Transactions WHERE TransactionID = %s", (id,))
+    transaction = cur.fetchone()
+    cur.close()
+
+    if request.method == 'POST':
+        transactionid = request.form['transactionid']
+        customerid = request.form['customerid']
+        roomid = request.form['roomid']
+        serviceid = request.form['serviceid']
+        amount = request.form['amount']
+        paymentmethod = request.form['paymentmethod']
+        transactiondate = request.form['transactiondate']
+        deposit = request.form['deposit']
+        refund = request.form['refund']
+        tax = request.form['tax']
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE Transactions SET TransactionID = %s, CustomerID = %s, RoomID = %s, ServiceID = %s, Amount = %s, PaymentMethod = %s, TransactionDate = %s, Deposit = %s, Refund = %s, Tax = %s WHERE TransactionID = %s",
+                    (transactionid, customerid, roomid, serviceid, amount, paymentmethod, transactiondate, deposit, refund, tax, id))
+        mysql.connection.commit()
+        flash("交易信息更新成功！")
+        return redirect(url_for('transactions'))
+
+    return render_template('edit_transactions.html', transaction=transaction)
 
 if __name__ == '__main__':
     app.run(debug=True)

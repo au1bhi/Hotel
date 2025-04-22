@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Terminal</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #212529;
+            color: #fff;
+            font-family: monospace, sans-serif;
+            padding: 20px;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        .terminal-header {
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .terminal-form {
+            margin-bottom: 20px;
+        }
+
+        .terminal-form label {
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .terminal-form textarea {
+            background-color: #343a40;
+            color: #fff;
+            border: none;
+            height: 150px;
+            resize: vertical;
+        }
+
+        .terminal-form button {
+            background-color: #dc3545;
+            border: none;
+        }
+
+        a {
+            color: #007bff;
+        }
+
+        .sql-result {
+            margin-top: 20px;
+            color: #fff;
+        }
+
+        .sql-result table {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="terminal-header">SQL Terminal</h1>
+        <p>Please enter your SQL command below:</p>
+        <form action="/execute_sql" method="POST" class="terminal-form">
+            <div class="form-group">
+                <label for="sql_code">>_</label>
+                <textarea class="form-control" id="sql_code" name="sql_code" rows="5"></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger">Execute</button>
+            <a href="/" class="btn btn-secondary">Back to Home</a>
+        </form>
+
+        <!-- SQL Execution Result -->
+        {% if sql_result %}
+        <div class="sql-result">
+            <h3 class="mt-4">SQL Execution Result</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            {% if sql_result %}
+                                {% for column in range(sql_result[0]|length) %}
+                                    <th>Column {{ column + 1 }}</th>
+                                {% endfor %}
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in sql_result %}
+                            <tr>
+                                {% for cell in row %}
+                                    <td>{{ cell }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

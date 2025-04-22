@@ -3,6 +3,38 @@
 <head>
     <title>MIS-300-90-G1-Hotel Management System</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .table th,
+        .table td {
+            text-align: center;
+        }
+        .terminal-form {
+            background-color: #212529;
+            color: #fff;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 30px;
+            font-family: monospace, sans-serif;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .terminal-form label {
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        .terminal-form textarea {
+            background-color: #343a40;
+            color: #fff;
+            border: none;
+        }
+        .terminal-form button {
+            background-color: #dc3545;
+            border: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-4">
@@ -17,6 +49,8 @@
                 </div>
             </div>
         </form>
+
+		<a href="/terminal" class="btn btn-info btn-block">SQL Terminal</a>
 
         <div class="row mt-4">
             <div class="col-md-3">
@@ -148,6 +182,35 @@
         <p>No services found.</p>
         {% endif %}
         {% endif %}
+
+        <!-- SQL 执行结果 -->
+        {% if sql_result %}
+        <h3 class="mt-4">SQL_RESULT</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    {% if sql_result %}
+                        {% for column in sql_result[0] %}
+                            <th>{{ column }}</th>
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in sql_result %}
+                    <tr>
+                        {% for cell in row %}
+                            <td>{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
