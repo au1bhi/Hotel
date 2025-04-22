@@ -1,4 +1,4 @@
-# 酒店管理系统  (Hotel Management System)
+# MIS-300-90-G1-Hotel Management System
 
 本项目是一个使用 Flask（Python Web 框架）和 MySQL 构建的酒店管理系统，用于数据库管理。 它提供了一个简单的界面来管理房间、客户、预订和服务。
 
