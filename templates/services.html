@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Services Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <a href="/" class="btn btn-secondary mb-3">Back to Home</a>
+        <h2>Services Management</h2>
+
+        <!-- Add New Service Form -->
+        <div class="card mt-4">
+            <div class="card-header">
+                Add New Service
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <input type="hidden" name="action" value="add">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Service ID</label>
+                            <input type="number" class="form-control" name="serviceid" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Service Type</label>
+                            <input type="text" class="form-control" name="servicetype" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Price</label>
+                            <input type="number" step="0.01" class="form-control" name="price" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Service Time</label>
+                            <input type="date" class="form-control" name="servicetime">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Service</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Service List -->
+        <div class="mt-4">
+            <h3>Service List</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Service ID</th>
+                        <th>Service Type</th>
+                        <th>Price</th>
+                        <th>Service Time</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for service in services %}
+                    <tr>
+                        <td>{{ service[0] }}</td>
+                        <td>{{ service[1] }}</td>
+                        <td>{{ service[2] }}</td>
+                        <td>{{ service[3] }}</td>
+                        <td>
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="serviceid" value="{{ service[0] }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

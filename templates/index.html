@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MIS-300-90-G1-Hotel Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>MIS-300-90-G1-Hotel Management System</h1>
+
+        <!-- 搜索表单 -->
+        <form method="POST" class="mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search..." name="search_term" value="{{ search_term }}">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="row mt-4">
+            <div class="col-md-3">
+                <a href="/rooms" class="btn btn-primary btn-block">Rooms Management</a>
+            </div>
+            <div class="col-md-3">
+                <a href="/customers" class="btn btn-primary btn-block">Customers Management</a>
+            </div>
+            <div class="col-md-3">
+                <a href="/reservations" class="btn btn-primary btn-block">Reservations Management</a>
+            </div>
+            <div class="col-md-3">
+                <a href="/services" class="btn btn-primary btn-block">Services Management</a>
+            </div>
+        </div>
+
+        <!-- 搜索结果 -->
+        {% if search_term %}
+        <h3 class="mt-4">Search Results for "{{ search_term }}"</h3>
+
+        <h4>Rooms</h4>
+        {% if rooms %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Room ID</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for room in rooms %}
+                <tr>
+                    <td>{{ room[0] }}</td>
+                    <td>{{ room[1] }}</td>
+                    <td>{{ room[2] }}</td>
+                    <td>{{ room[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No rooms found.</p>
+        {% endif %}
+
+        <h4>Customers</h4>
+        {% if customers %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>{{ customer[0] }}</td>
+                    <td>{{ customer[1] }}</td>
+                    <td>{{ customer[2] }}</td>
+                    <td>{{ customer[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No customers found.</p>
+        {% endif %}
+
+        <h4>Reservations</h4>
+        {% if reservations %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Reservation ID</th>
+                    <th>Customer ID</th>
+                    <th>Room ID</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation[0] }}</td>
+                    <td>{{ reservation[1] }}</td>
+                    <td>{{ reservation[2] }}</td>
+                    <td>{{ reservation[6] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No reservations found.</p>
+        {% endif %}
+
+        <h4>Services</h4>
+        {% if services %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Service ID</th>
+                    <th>Service Type</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <td>{{ service[0] }}</td>
+                    <td>{{ service[1] }}</td>
+                    <td>{{ service[2] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No services found.</p>
+        {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>

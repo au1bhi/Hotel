@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservations Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <a href="/" class="btn btn-secondary mb-3">Back to Home</a>
+        <h2>Reservations Management</h2>
+
+        <!-- 添加预订表单 -->
+        <div class="card mt-4">
+            <div class="card-header">
+                Add New Reservation
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <input type="hidden" name="action" value="add">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Reservation ID</label>
+                            <input type="number" class="form-control" name="reservationid" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Customer ID</label>
+                            <input type="number" class="form-control" name="customerid" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Room ID</label>
+                            <input type="number" class="form-control" name="roomid" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Reservation Date</label>
+                            <input type="date" class="form-control" name="reservationdate" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Check-In Date</label>
+                            <input type="date" class="form-control" name="checkindate" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Check-Out Date</label>
+                            <input type="date" class="form-control" name="checkoutdate" required>
+                        </div>
+                         <div class="form-group col-md-2">
+                            <label>Status</label>
+                            <select class="form-control" name="status" required>
+                                <option value="Booked">Booked</option>
+                                <option value="Occupied">Occupied</option>
+                                <option value="Checked-Out">Checked-Out</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Reservation</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 预订列表 -->
+        <div class="mt-4">
+            <h3>Reservation List</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Reservation ID</th>
+                        <th>Customer ID</th>
+                        <th>Room ID</th>
+                        <th>Reservation Date</th>
+                        <th>Check-In Date</th>
+                        <th>Check-Out Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation[0] }}</td>
+                        <td>{{ reservation[1] }}</td>
+                        <td>{{ reservation[2] }}</td>
+                        <td>{{ reservation[3] }}</td>
+                        <td>{{ reservation[4] }}</td>
+                        <td>{{ reservation[5] }}</td>
+                        <td>{{ reservation[6] }}</td>
+                        <td>
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="reservationid" value="{{ reservation[0] }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
