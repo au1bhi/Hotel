@@ -48,6 +48,8 @@
 -   **客户管理 (Customers Management):** 添加、删除和查看客户。
 -   **预订管理 (Reservations Management):** 添加、删除和查看预订。
 -   **服务管理 (Services Management):** 添加、删除和查看服务。
+-   **会员管理 (Members Management):** 添加、删除和查看会员。
+-   **交易管理 (Transactions Management):** 添加、删除和查看交易。
 -   **搜索 (Search):** 跨所有表搜索。
 
 ## 错误日志记录 (Error Logging)

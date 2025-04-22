@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transactions Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <a href="/" class="btn btn-secondary mb-3">Back to Home</a>
+        <h2>Transactions Management</h2>
+
+        <!-- Add New Transaction Form -->
+        <div class="card mt-4">
+            <div class="card-header">
+                Add New Transaction
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <input type="hidden" name="action" value="add">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Transaction ID</label>
+                            <input type="number" class="form-control" name="transactionid" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Customer ID</label>
+                            <input type="number" class="form-control" name="customerid" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Room ID</label>
+                            <input type="number" class="form-control" name="roomid">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Service ID</label>
+                            <input type="number" class="form-control" name="serviceid">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Amount</label>
+                            <input type="number" step="0.01" class="form-control" name="amount" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Payment Method</label>
+                            <input type="text" class="form-control" name="paymentmethod" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label>Transaction Date</label>
+                            <input type="date" class="form-control" name="transactiondate" required>
+                        </div>
+                         <div class="form-group col-md-2">
+                            <label>Deposit</label>
+                            <input type="number" step="0.01" class="form-control" name="deposit">
+                        </div>
+                         <div class="form-group col-md-2">
+                            <label>Refund</label>
+                            <input type="number" step="0.01" class="form-control" name="refund">
+                        </div>
+                         <div class="form-group col-md-2">
+                            <label>Tax</label>
+                            <input type="number" step="0.01" class="form-control" name="tax">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Transaction</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Transaction List -->
+        <div class="mt-4">
+            <h3>Transaction List</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Customer ID</th>
+                        <th>Room ID</th>
+                        <th>Service ID</th>
+                        <th>Amount</th>
+                        <th>Payment Method</th>
+                        <th>Transaction Date</th>
+                        <th>Deposit</th>
+                        <th>Refund</th>
+                        <th>Tax</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td>{{ transaction[0] }}</td>
+                        <td>{{ transaction[1] }}</td>
+                        <td>{{ transaction[2] }}</td>
+                        <td>{{ transaction[3] }}</td>
+                        <td>{{ transaction[4] }}</td>
+                        <td>{{ transaction[5] }}</td>
+                        <td>{{ transaction[6] }}</td>
+                        <td>{{ transaction[7] }}</td>
+                        <td>{{ transaction[8] }}</td>
+                        <td>{{ transaction[9] }}</td>
+                        <td>
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="transactionid" value="{{ transaction[0] }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

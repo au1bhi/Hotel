@@ -167,8 +167,6 @@ def reservations():
         elif request.form.get('action') == 'delete':
             reservationid = request.form['reservationid']
             try:
-                # 删除与该预定相关的交易记录
-                # 删除预订
                 cur.execute("DELETE FROM Reservations WHERE ReservationID = %s", (reservationid,))
                 mysql.connection.commit()
                 flash("预订删除成功！")
@@ -212,6 +210,70 @@ def services():
     services = cur.fetchall()
     cur.close()
     return render_template('services.html', services=services)
+
+# 会员管理路由
+@app.route('/members', methods=['GET', 'POST'])
+def members():
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        if request.form.get('action') == 'add':
+            memberid = request.form['memberid']
+            customerid = request.form['customerid']
+            membershipslevel = request.form['membershipslevel']
+            points = request.form['points']
+            cur.execute("INSERT INTO Members VALUES (%s, %s, %s, %s)",
+                        (memberid, customerid, membershipslevel, points))
+            mysql.connection.commit()
+            flash("会员添加成功！")
+        elif request.form.get('action') == 'delete':
+            memberid = request.form['memberid']
+            try:
+                cur.execute("DELETE FROM Members WHERE MemberID = %s", (memberid,))
+                mysql.connection.commit()
+                flash("会员删除成功！")
+            except Exception as e:
+                mysql.connection.rollback()
+                flash(f"删除失败：数据库错误！{e}")
+
+    cur.execute("SELECT * FROM Members")
+    members = cur.fetchall()
+    cur.close()
+    return render_template('members.html', members=members)
+
+# 交易管理路由
+@app.route('/transactions', methods=['GET', 'POST'])
+def transactions():
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        if request.form.get('action') == 'add':
+            transactionid = request.form['transactionid']
+            customerid = request.form['customerid']
+            roomid = request.form['roomid']
+            serviceid = request.form['serviceid']
+            amount = request.form['amount']
+            paymentmethod = request.form['paymentmethod']
+            transactiondate = request.form['transactiondate']
+            deposit = request.form['deposit']
+            refund = request.form['refund']
+            tax = request.form['tax']
+            cur.execute("INSERT INTO Transactions VALUES (%s, %s, %s,  %s, %s, %s, %s, %s, %s, %s)",
+                        (transactionid, customerid, roomid, serviceid, amount, paymentmethod, transactiondate, deposit, refund, tax))
+            mysql.connection.commit()
+            flash("交易添加成功！")
+        elif request.form.get('action') == 'delete':
+            transactionid = request.form['transactionid']
+            try:
+                cur.execute("DELETE FROM Transactions WHERE TransactionID = %s", (transactionid,))
+                mysql.connection.commit()
+                flash("交易删除成功！")
+            except Exception as e:
+                mysql.connection.rollback()
+                flash(f"删除失败：数据库错误！{e}")
+
+    cur.execute("SELECT * FROM Transactions")
+    transactions = cur.fetchall()
+    cur.close()
+    return render_template('transactions.html', transactions=transactions)
 
 if __name__ == '__main__':
     app.run(debug=True)

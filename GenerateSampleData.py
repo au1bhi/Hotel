@@ -1,6 +1,7 @@
 from faker import Faker
 import mysql.connector
 import random
+import datetime
 
 db_config = {
     'host': 'localhost',
@@ -8,7 +9,6 @@ db_config = {
     'password': 'PASSword@0',
     'database': 'hotel_db'
 }
-
 
 fake = Faker('en_US')
 
@@ -60,6 +60,37 @@ def generate_reservations(num_reservations, num_customers, num_rooms):
         reservations.append((i, customerid, roomid, reservationdate, checkindate, checkoutdate, status))
     return reservations
 
+def generate_members(num_members, num_customers):
+    members = []
+    membership_levels = ['Bronze', 'Silver', 'Gold', 'Platinum']
+    used_customer_ids = set()
+    for i in range(1, num_members + 1):
+        while True:
+            customerid = random.randint(1, num_customers)
+            if customerid not in used_customer_ids:
+                used_customer_ids.add(customerid)
+                break
+        membershiplevel = random.choice(membership_levels)
+        points = random.randint(0, 1000)
+        members.append((i, customerid, membershiplevel, points))
+    return members
+
+def generate_transactions(num_transactions, num_customers, num_rooms, num_services):
+    transactions = []
+    payment_methods = ['Credit Card', 'Debit Card', 'Cash', 'Paypal']
+    for i in range(1, num_transactions + 1):
+        customerid = random.randint(1, num_customers)
+        roomid = random.randint(1, num_rooms) if random.random() > 0.5 else None
+        serviceid = random.randint(1, num_services) if random.random() > 0.5 else None
+        amount = round(random.uniform(50, 1000), 2)
+        paymentmethod = random.choice(payment_methods)
+        transactiondate = fake.date_time_between(start_date='-1y', end_date='now')
+        deposit = round(random.uniform(0, 100), 2) if random.random() > 0.7 else 0.00
+        refund = round(random.uniform(0, 50), 2) if random.random() > 0.8 else 0.00
+        tax = round(amount * 0.08, 2)
+        transactions.append((i, customerid, roomid, serviceid, amount, paymentmethod, transactiondate, deposit, refund, tax))
+    return transactions
+
 def insert_data(table_name, data, connection):
     cursor = connection.cursor()
     if table_name == 'Rooms':
@@ -70,6 +101,10 @@ def insert_data(table_name, data, connection):
         sql = "INSERT INTO Services (ServiceID, ServiceType, Price, ServiceTime) VALUES (%s, %s, %s, %s)"
     elif table_name == 'Reservations':
         sql = "INSERT INTO Reservations (ReservationID, CustomerID, RoomID, ReservationDate, CheckInDate, CheckOutDate, Status) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    elif table_name == 'Members':
+        sql = "INSERT INTO Members (MemberID, CustomerID, MembershipLevel, Points) VALUES (%s, %s, %s, %s)"
+    elif table_name == 'Transactions':
+        sql = "INSERT INTO Transactions (TransactionID, CustomerID, RoomID, ServiceID, Amount, PaymentMethod, TransactionDate, Deposit, Refund, Tax) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     else:
         print(f"Unknown table name: {table_name}")
         return
@@ -94,16 +129,22 @@ if __name__ == '__main__':
             num_customers = 60
             num_services = 20
             num_reservations = 30
+            num_members = 20
+            num_transactions = 20
 
             rooms_data = generate_rooms(num_rooms)
             customers_data = generate_customers(num_customers)
             services_data = generate_services(num_services)
             reservations_data = generate_reservations(num_reservations, num_customers, num_rooms)
+            members_data = generate_members(num_members, num_customers)
+            transactions_data = generate_transactions(num_transactions, num_customers, num_rooms, num_services)
 
             insert_data('Rooms', rooms_data, connection)
             insert_data('Customers', customers_data, connection)
             insert_data('Services', services_data, connection)
             insert_data('Reservations', reservations_data, connection)
+            insert_data('Members', members_data, connection)
+            insert_data('Transactions', transactions_data, connection)
 
     except Exception as e:
         print(f"Error: {e}")
