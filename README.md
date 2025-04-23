@@ -1,64 +1,85 @@
 # MIS-300-90-G1-Hotel Management System
 
-本项目是一个使用 Flask（Python Web 框架）和 MySQL 构建的酒店管理系统，用于数据库管理。 它提供了一个简单的界面来管理房间、客户、预订和服务。
+This project is a hotel management system built using Flask (a Python web framework) and MySQL for database management. It provides a simple interface to manage rooms, customers, reservations, and services.
 
-## 项目结构 (Project Structure)
+## Project Structure
 
-该项目具有以下结构：
+The project has the following structure:
 
--   `app.py`: 主要应用程序文件，包含 Flask 路由和逻辑。
--   `establish.sql`: SQL 脚本，用于创建必要的数据库表。
--   `GenerateSampleData.py`: Python 脚本，用于生成数据库的示例数据。
--   `templates/`: 目录，包含 Web 界面的 HTML 模板。
-    -   `index.html`: 主页 (Home Page)。
-    -   `rooms.html`: 房间管理页面 (Rooms Management Page)。
-    -   `customers.html`: 客户管理页面 (Customers Management Page)。
-    -   `reservations.html`: 预订管理页面 (Reservations Management Page)。
-    -   `services.html`: 服务管理页面 (Services Management Page)。
--   `hotel.log`: 用于错误日志记录的日志文件。
--   `README.md`: 本文件，提供项目概述。
+-   `app.py`: The main application file containing Flask routes and logic.
+-   `establish.sql`: SQL script to create the necessary database tables.
+-   `GenerateSampleData.py`: Python script to generate sample data for the database.
+-   `templates/`: Directory containing HTML templates for the web interface.
+    -   `index.html`: Home Page.
+    -   `rooms.html`: Rooms Management Page.
+    -   `customers.html`: Customers Management Page.
+    -   `reservations.html`: Reservations Management Page.
+    -   `services.html`: Services Management Page.
+    -   `members.html`: Members Management Page.
+    -   `transactions.html`: Transactions Management Page.
+    -   `edit_rooms.html`: Edit Room Page.
+    -   `edit_customers.html`: Edit Customer Page.
+    -   `edit_reservations.html`: Edit Reservation Page.
+    -   `edit_services.html`: Edit Service Page.
+    -   `edit_members.html`: Edit Member Page.
+    -   `edit_transactions.html`: Edit Transaction Page.
+    -   `terminal.html`: SQL Terminal Page (Disabled due to security concerns).
+-   `hotel.log`: Log file for error logging.
+-   `README.md`: This file, providing a project overview.
 
-## 安装说明 (Setup Instructions)
+## Setup Instructions
 
-1.  **安装依赖项 (Install Dependencies):**
+1.  **Install Dependencies:**
 
     ```bash
     pip install Flask Flask-MySQLdb Faker
     ```
 
-2.  **创建数据库 (Create Database):**
+2.  **Create Database:**
 
-    运行 `establish.sql` 脚本以在 MySQL 数据库中创建必要的表。
+    Run the `establish.sql` script to create the necessary tables in your MySQL database.
 
-3.  **配置 (Configuration):**
+3.  **Configuration:**
 
-    修改 `app.py` 中的数据库配置以匹配您的 MySQL 设置。
+    Modify the database configuration in `app.py` to match your MySQL settings.
 
-4.  **运行应用程序 (Run the Application):**
+4.  **Run the Application:**
 
     ```bash
     python app.py
     ```
 
-## 用法 (Usage)
+## Usage
 
-该应用程序提供以下功能：
+The application provides the following functionalities:
 
--   **房间管理 (Rooms Management):** 添加、删除和查看房间。
--   **客户管理 (Customers Management):** 添加、删除和查看客户。
--   **预订管理 (Reservations Management):** 添加、删除和查看预订。
--   **服务管理 (Services Management):** 添加、删除和查看服务。
--   **会员管理 (Members Management):** 添加、删除和查看会员。
--   **交易管理 (Transactions Management):** 添加、删除和查看交易。
--   **搜索 (Search):** 跨所有表搜索。
+-   **Rooms Management:** Add, delete, and view rooms.
+-   **Customers Management:** Add, delete, and view customers.
+-   **Reservations Management:** Add, delete, and view reservations.
+-   **Services Management:** Add, delete, and view services.
+-   **Members Management:** Add, delete, and view members.
+-   **Transactions Management:** Add, delete, and view transactions.
+-   **Search:** Search across all tables.
 
-## 错误日志记录 (Error Logging)
+## Parameterized Queries
 
-该应用程序将错误记录到 `hotel.log` 文件。
+To prevent SQL injection vulnerabilities, the application uses parameterized queries. Instead of directly embedding user input into SQL queries, data is passed as parameters. This ensures that the database treats the input as data, not as executable code.
 
-## 示例数据生成 (Sample Data Generation)
+Example:
 
-`GenerateSampleData.py` 脚本可用于生成示例数据以进行测试。 使用以下命令运行脚本：
+```python
+cur.execute("SELECT * FROM Rooms WHERE RoomID LIKE %s OR RoomType LIKE %s OR Status LIKE %s", 
+            ('%' + search_term + '%', '%' + search_term + '%', '%' + search_term + '%'))
+```
+
+
+## Error Logging
+
+The application logs errors to the `hotel.log` file.
+
+## Sample Data Generation
+
+The `GenerateSampleData.py` script can be used to generate sample data for testing. Run the script using the following command:
 
 ```bash
 python GenerateSampleData.py
